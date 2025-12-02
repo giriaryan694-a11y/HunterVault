@@ -218,5 +218,3 @@ Always obtain proper authorization before testing any system.
 Thank you for using HunterVault - Your Complete Bug Bounty Tools Repository!
 
 Stay ethical, stay curious, and happy hunting! 🔍🛡️
-
-============================================
