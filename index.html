@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HunterVault - Complete Bug Bounty Tools Repository</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --accent: #0d6efd;
+            --accent-hover: #0b5ed7;
+            --border: #dee2e6;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e9ecef;
+            --text-secondary: #adb5bd;
+            --accent: #0d6efd;
+            --accent-hover: #3d8bfd;
+            --border: #495057;
+            --card-bg: #2d2d2d;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--accent) 0%, #6610f2 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-text h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header-text p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .author-credit {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .author-credit h2 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .category {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px var(--shadow);
+            border-color: var(--accent);
+        }
+
+        .tool-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .search-container {
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 120px;
+            z-index: 50;
+            background: var(--bg-primary);
+            padding: 1rem 0;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        footer {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: var(--card-bg);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .header-text h1 {
+                font-size: 2rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-text">
+                <h1>🎯 HunterVault</h1>
+                <p>Complete Bug Bounty Tools Repository - 200+ Tools</p>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="theme-icon">🌙</span>
+                <span id="theme-text">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="author-credit">
+            <h2>Written by Aryan Giri</h2>
+            <p>Comprehensive collection of 200+ bug bounty hunting tools and resources extracted from PDF</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search through 200+ tools by name or description..." onkeyup="searchTools()">
+        </div>
+
+        <div id="toolsContainer">
+            <!-- Wordlists Section -->
+            <div class="category">
+                <h2 class="category-title">📝 Wordlists</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">cewl</div>
+                        <div class="tool-description">CeWL (Custom Word List generator) is a ruby app which spiders a given URL, up to a specified depth, and returns a list of words which can then be used for password crackers such as John the Ripper.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">cUPP</div>
+                        <div class="tool-description">CUPP tool is an automated script written in python that interacts with the user and answers fundamental questions about the victim like Name, Company Name, Partner's Name, etc.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">crunch</div>
+                        <div class="tool-description">Crunch is a wordlist generator where you can specify a standard character set or any set of characters to be used in generating wordlists.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">pydictor</div>
+                        <div class="tool-description">A powerful and useful hacker dictionary builder for brute-force attacks.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">rsmangler</div>
+                        <div class="tool-description">RSMangler takes a wordlist and performs various manipulations on it similar to John the Ripper, generating permutations and acronyms before applying mangles.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">rockyou.txt</div>
+                        <div class="tool-description">Kali Linux provides this dictionary file as part of its standard installation.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">seclists</div>
+                        <div class="tool-description">SecLists is a collection of multiple types of lists used during security assessments including usernames, passwords, URLs, fuzzing payloads, and more.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloud Storage Section -->
+            <div class="category">
+                <h2 class="category-title">☁️ Cloud Storage</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">GCPBucketBrute</div>
+                        <div class="tool-description">A script to enumerate Google Storage buckets, determine access levels, and check for privilege escalation possibilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">spaces-finder</div>
+                        <div class="tool-description">A tool to hunt for publicly accessible DigitalOcean Spaces.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Command Injection Section -->
+            <div class="category">
+                <h2 class="category-title">💉 Command Injection</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">Commix</div>
+                        <div class="tool-description">Automated All-in-One OS command injection and exploitation tool.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SQL Injection Section -->
+            <div class="category">
+                <h2 class="category-title">🗄️ SQL Injection</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">sqlmap</div>
+                        <div class="tool-description">Automatic SQL injection and database takeover tool - http://sqlmap.org</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Sqliv</div>
+                        <div class="tool-description">Massive SQL injection vulnerability scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Sqlmate</div>
+                        <div class="tool-description">A friend of SQLmap which will do what you always expected from SQLmap.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">NoSQLMap</div>
+                        <div class="tool-description">Automated NoSQL database enumeration and web application exploitation tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">SQLiScanner</div>
+                        <div class="tool-description">Automatic SQL injection with Charles and sqlmap api.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">SleuthQL</div>
+                        <div class="tool-description">Python3 Burp History parsing tool to discover potential SQL injection points for use with SQLmap.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">mssqlproxy</div>
+                        <div class="tool-description">Toolkit for lateral movement through compromised Microsoft SQL Server via socket reuse.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">sqli-hunter</div>
+                        <div class="tool-description">HTTP/HTTPS proxy server and SQLMAP API wrapper that makes digging SQLi easy.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">waybackSqliScanner</div>
+                        <div class="tool-description">Gather URLs from Wayback Machine then test each GET parameter for SQL injection.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ESC</div>
+                        <div class="tool-description">Evil SQL Client (ESC) - interactive .NET SQL console client with enhanced SQL Server discovery and data exfiltration.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">mssqli-duet</div>
+                        <div class="tool-description">SQL injection script for MSSQL that extracts domain users.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">burp-to-sqlmap</div>
+                        <div class="tool-description">Performing SQL injection tests on Burp Suite Bulk Requests using SQLMap.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">BurpSQLTruncSanner</div>
+                        <div class="tool-description">BurpSuite plugin for SQL Truncation vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">andor</div>
+                        <div class="tool-description">Blind SQL Injection Tool with Golang.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Blinder</div>
+                        <div class="tool-description">Python library to automate time-based blind SQL injection.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">nosqli</div>
+                        <div class="tool-description">NoSQL Injection CLI tool for finding vulnerable websites using MongoDB.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- XSS Section -->
+            <div class="category">
+                <h2 class="category-title">⚡ XSS Injection</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">XSStrike</div>
+                        <div class="tool-description">Most advanced XSS scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XSS-keylogger</div>
+                        <div class="tool-description">A keystroke logger to exploit XSS vulnerabilities in a site.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xssor2</div>
+                        <div class="tool-description">Hack with JavaScript.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xsscrapy</div>
+                        <div class="tool-description">66/66 wavsep XSS detected.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">sleepy-puppy</div>
+                        <div class="tool-description">Sleepy Puppy XSS Payload Management Framework.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ezXSS</div>
+                        <div class="tool-description">Easy way for penetration testers and bug bounty hunters to test (blind) Cross Site Scripting.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xsshunter</div>
+                        <div class="tool-description">The XSS Hunter service - a portable version of XSSHunter.com.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dalfox</div>
+                        <div class="tool-description">DalFox (Finder Of XSS) - Parameter Analysis and XSS Scanning tool based on golang.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xsser</div>
+                        <div class="tool-description">Cross Site "Scripter" - automatic framework to detect, exploit and report XSS vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XSpear</div>
+                        <div class="tool-description">Powerful XSS Scanning and Parameter analysis tool & gem.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">weaponised-XSS-payloads</div>
+                        <div class="tool-description">XSS payloads designed to turn alert(1) into P1.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">tracy</div>
+                        <div class="tool-description">Tool to assist with finding all sinks and sources of a web application.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xssValidator</div>
+                        <div class="tool-description">Burp intruder extender for automation and validation of XSS vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">JSShell</div>
+                        <div class="tool-description">Interactive multi-user web JS shell.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">bXSS</div>
+                        <div class="tool-description">Utility to identify Blind Cross-Site Scripting for bug hunters and organizations.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">docem</div>
+                        <div class="tool-description">Utility to embed XXE and XSS payloads in docx, odt, pptx, etc (OXML_XEE on steroids).</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XSS-Radar</div>
+                        <div class="tool-description">Tool that detects parameters and fuzzes them for cross-site scripting vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">BruteXSS</div>
+                        <div class="tool-description">Tool written in python to find XSS vulnerabilities in web applications.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">findom-xss</div>
+                        <div class="tool-description">Fast DOM based XSS vulnerability scanner with simplicity.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">domdig</div>
+                        <div class="tool-description">DOM XSS scanner for Single Page Applications.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">femida</div>
+                        <div class="tool-description">Automated blind-xss search for Burp Suite.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">domxssscanner</div>
+                        <div class="tool-description">Online tool to scan source code for DOM based XSS vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xsshunter_client</div>
+                        <div class="tool-description">Correlated injection proxy tool for XSS Hunter.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">extended-xss-search</div>
+                        <div class="tool-description">Better version of xssfinder tool - scans for different types of XSS on a list of URLs.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xssmap</div>
+                        <div class="tool-description">Tool based on Python3 to detect XSS vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XSSCon</div>
+                        <div class="tool-description">Simple XSS Scanner tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">BitBlinder</div>
+                        <div class="tool-description">BurpSuite extension to inject custom cross-site scripting payloads on every form/request to detect blind XSS.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XSSOauthPersistence</div>
+                        <div class="tool-description">Maintaining account persistence via XSS and Oauth.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">shadow-workers</div>
+                        <div class="tool-description">Free and open source C2 and proxy for exploitation of XSS and malicious Service Workers.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">rexsser</div>
+                        <div class="tool-description">Burp plugin that extracts keywords from response using regexes and tests for reflected XSS.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xss-flare</div>
+                        <div class="tool-description">XSS hunter on cloudflare serverless workers.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Xss-Sql-Fuzz</div>
+                        <div class="tool-description">Burpsuite plugin automatically adds XSS SQL payload to fuzz all GET/POST parameters.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">vaya-ciego-nen</div>
+                        <div class="tool-description">Detect, manage and exploit Blind Cross-site scripting (XSS) vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dom-based-xss-finder</div>
+                        <div class="tool-description">Chrome extension that finds DOM based XSS vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XSSTerminal</div>
+                        <div class="tool-description">Develop your own XSS Payload using interactive typing.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xss2png</div>
+                        <div class="tool-description">PNG IDAT chunks XSS payload generator.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XSSwagger</div>
+                        <div class="tool-description">Simple Swagger-ui scanner that detects old versions vulnerable to XSS attacks.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Section -->
+            <div class="category">
+                <h2 class="category-title">🔑 API Security</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">Secretx</div>
+                        <div class="tool-description">Extracting apt keys and secrets by requesting each URL in your list.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AWS S3 Section -->
+            <div class="category">
+                <h2 class="category-title">🪣 AWS S3 Bucket Tools</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">s3brute</div>
+                        <div class="tool-description">S3 brute force tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">S3-bucket-finder</div>
+                        <div class="tool-description">Find AWS S3 buckets and extract data.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">bucket-stream</div>
+                        <div class="tool-description">Find interesting Amazon S3 Buckets by watching certificate.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">slurp</div>
+                        <div class="tool-description">Enumerate S3 buckets via certstream, domain, or keywords.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">lazys3</div>
+                        <div class="tool-description">Ruby script to bruteforce for AWS S3 buckets using different permutations.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">cred scanner</div>
+                        <div class="tool-description">Simple file-based scanner to look for potential AWS access and secret keys in files.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">DumpsterDiver</div>
+                        <div class="tool-description">Tool to analyze big volumes of various file types in search of hardcoded secrets like AWS keys, SSH keys, or passwords.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">S3Scanner</div>
+                        <div class="tool-description">Scan for open AWS S3 buckets and dump the contents.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">AWSBucketDump</div>
+                        <div class="tool-description">Security Tool to Look For Interesting Files in S3 Buckets.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">CloudScraper</div>
+                        <div class="tool-description">Tool to enumerate targets in search of cloud resources: S3 Buckets, Azure Blobs, Digital Ocean Storage Space.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">s3viewer</div>
+                        <div class="tool-description">Publicly Open Amazon AWS S3 Bucket Viewer.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">festin</div>
+                        <div class="tool-description">S3 Bucket Weakness Discovery.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">s3reverse</div>
+                        <div class="tool-description">Convert various S3 bucket formats into one format for bugbounty and security testing.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">mass-s3-bucket-tester</div>
+                        <div class="tool-description">Tests a list of S3 buckets to see if they have directory listings enabled or if they are uploadable.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">S3BucketList</div>
+                        <div class="tool-description">Firefox plugin that lists Amazon S3 Buckets found in requests.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dirlstr</div>
+                        <div class="tool-description">Finds Directory Listings or open S3 buckets from a list of URLs.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Burp-AnonymousCloud</div>
+                        <div class="tool-description">Burp extension that performs passive scan to identify cloud buckets and test for publicly accessible vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">kicks3</div>
+                        <div class="tool-description">S3 bucket finder from HTML, JS and bucket misconfiguration testing tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">2tearsinabucket</div>
+                        <div class="tool-description">Enumerate S3 buckets for a specific target.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">s3_objects_check</div>
+                        <div class="tool-description">Whitebox evaluation of effective S3 object permissions to identify publicly accessible files.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">s3tk</div>
+                        <div class="tool-description">Security toolkit for Amazon S3.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">CloudBrute</div>
+                        <div class="tool-description">Awesome cloud enumerator.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">s3cario</div>
+                        <div class="tool-description">Gets CNAME first if it's a valid Amazon S3 bucket, otherwise checks if domain is a bucket name.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">S3Cruze</div>
+                        <div class="tool-description">All-in-one AWS S3 bucket tool for pentesters.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JavaScript Analysis Section -->
+            <div class="category">
+                <h2 class="category-title">📜 JavaScript Analysis</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">JSParser</div>
+                        <div class="tool-description">Python 2.7 script using Tornado and JSBeautifier to parse relative URLs from JavaScript files.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">relative-url-extractor</div>
+                        <div class="tool-description">Small tool that extracts relative URLs from a file.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">sub.js</div>
+                        <div class="tool-description">Tool to get JavaScript files from a list of URLs or subdomains.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">LinkFinder</div>
+                        <div class="tool-description">Python script that finds endpoints in JavaScript files.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">JS-Scan</div>
+                        <div class="tool-description">.js scanner built in PHP designed to scrape URLs and other info.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">LinksDumper</div>
+                        <div class="tool-description">Extract links/possible endpoints from responses & filter them via decoding/sorting.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">GoLinkFinder</div>
+                        <div class="tool-description">Fast and minimal JS endpoint extractor.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">BurpJSLinkFinder</div>
+                        <div class="tool-description">Burp Extension for passive scanning JS files for endpoint links.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">getJS</div>
+                        <div class="tool-description">Tool to quickly get all JavaScript sources/files.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">linx</div>
+                        <div class="tool-description">Reveals invisible links within JavaScript files.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Audit Section -->
+            <div class="category">
+                <h2 class="category-title">🔍 Code Audit</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">Cobra</div>
+                        <div class="tool-description">Source Code Security Audit tool.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crawler Section -->
+            <div class="category">
+                <h2 class="category-title">🕷️ Crawlers</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">waybackMachine</div>
+                        <div class="tool-description">Use Wayback Machine data to pull a list of paths.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">meg</div>
+                        <div class="tool-description">Fetch many paths for many hosts without killing the hosts.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">hakrawler</div>
+                        <div class="tool-description">Simple, fast web crawler designed for easy, quick discovery of endpoints and assets within web applications.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">igoturls</div>
+                        <div class="tool-description">WaybackURLS + OtxURLS + CommonCrawl.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">urlgrab</div>
+                        <div class="tool-description">Golang utility to spider through a website searching for additional links.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">waybackurls</div>
+                        <div class="tool-description">Fetch all URLs that the Wayback Machine knows about for a domain.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frameworks Section -->
+            <div class="category">
+                <h2 class="category-title">⚙️ Frameworks</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">Sniper</div>
+                        <div class="tool-description">Automated pentest framework for offensive security experts.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XRay</div>
+                        <div class="tool-description">Tool for recon, mapping and OSINT gathering from public networks.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Datasploit</div>
+                        <div class="tool-description">OSINT Framework to perform various recon techniques on Companies, People, Phone Numbers, Bitcoin Addresses, etc.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Osmedeus</div>
+                        <div class="tool-description">Fully automated offensive security framework for reconnaissance and vulnerability scanning.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">TIDoS-Framework</div>
+                        <div class="tool-description">The Offensive Manual Web Application Penetration Testing Framework.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">discover</div>
+                        <div class="tool-description">Custom bash scripts to automate penetration testing tasks including recon, scanning, parsing, and creating malicious payloads.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">lazyrecon</div>
+                        <div class="tool-description">Script to automate reconnaissance process in an organized fashion.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">003Recon</div>
+                        <div class="tool-description">Tools to automate recon - 003random.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Vulmap</div>
+                        <div class="tool-description">Web vulnerability scanning and verification tool with vulnerability verification function.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subdomain Enumeration Section -->
+            <div class="category">
+                <h2 class="category-title">🔍 Subdomain Enumeration</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">Findomain</div>
+                        <div class="tool-description">Fastest and cross-platform subdomain enumerator.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">chaos-client</div>
+                        <div class="tool-description">Go client to communicate with Chaos DNS API.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">domained</div>
+                        <div class="tool-description">Multi Tool Subdomain Enumeration.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">bugcrowd-levelup-subdomain-enumeration</div>
+                        <div class="tool-description">Material from "Esoteric sub-domain enumeration techniques" talk at Bugcrowd LevelUp 2017.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">shuffledns</div>
+                        <div class="tool-description">shuffleDNS wrapper around massdns for enumerating valid subdomains with wildcard handling.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">censys-subdomain-finder</div>
+                        <div class="tool-description">Perform subdomain enumeration using certificate transparency logs from Censys.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Turbolist3r</div>
+                        <div class="tool-description">Subdomain enumeration tool with analysis features for discovered domains.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">censys-enumeration</div>
+                        <div class="tool-description">Extract subdomains/emails using SSL/TLS certificate dataset on Censys.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">tugarecon</div>
+                        <div class="tool-description">Fast subdomains enumeration tool for penetration testers.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">as3nt</div>
+                        <div class="tool-description">Another Subdomain ENumeration Tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Subra</div>
+                        <div class="tool-description">Web-UI for subdomain enumeration (subfinder).</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Substr3am</div>
+                        <div class="tool-description">Passive reconnaissance/enumeration by watching for SSL certificates being issued.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">enumall.py</div>
+                        <div class="tool-description">Setup script for Recon-ng.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">altdns</div>
+                        <div class="tool-description">Generates permutations, alterations and mutations of subdomains and then resolves them.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">brutesubs</div>
+                        <div class="tool-description">Automation framework for running multiple subdomain bruteforcing tools in parallel via Docker Compose.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dns-parallel-prober</div>
+                        <div class="tool-description">Parallelised domain name prober to find subdomains as fast as possible.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dnscan</div>
+                        <div class="tool-description">Python wordlist-based DNS subdomain scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">hakrevdns</div>
+                        <div class="tool-description">Small, fast tool for performing reverse DNS lookups en masse.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dnsx</div>
+                        <div class="tool-description">Fast multi-purpose DNS toolkit to run multiple DNS queries with user-supplied resolvers.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">crtndstry</div>
+                        <div class="tool-description">Yet another subdomain finder.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">VHostScan</div>
+                        <div class="tool-description">Virtual host scanner that performs reverse lookups.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">scilla</div>
+                        <div class="tool-description">Information Gathering tool - DNS / Subdomains / Ports / Directories enumeration.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">sub3suite</div>
+                        <div class="tool-description">Research-grade suite of tools for subdomain enumeration, intelligence gathering and attack surface mapping.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Aquatone</div>
+                        <div class="tool-description">Tool for Domain Flyovers.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Knockpy</div>
+                        <div class="tool-description">Python tool to enumerate subdomains on a target domain through a wordlist.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">subbrute</div>
+                        <div class="tool-description">DNS meta-query spider that enumerates DNS records and subdomains.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Assetfinder</div>
+                        <div class="tool-description">Find domains and subdomains related to a given domain.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Rsdl</div>
+                        <div class="tool-description">Subdomain Scan with the Ping Method.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Massdns</div>
+                        <div class="tool-description">High-performance DNS stub resolver for bulk lookups and reconnaissance.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Subfinder</div>
+                        <div class="tool-description">Subdomain discovery tool that discovers valid subdomains for websites - useful for bug bounties.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Amass</div>
+                        <div class="tool-description">In-depth Attack Surface Mapping and Asset Discovery.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Sub.sh</div>
+                        <div class="tool-description">Online Subdomain Detect Script.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Sublist3r</div>
+                        <div class="tool-description">Fast subdomains enumeration tool for penetration testers.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Sudomy</div>
+                        <div class="tool-description">Subdomain enumeration tool to collect subdomains and analyze domains for bug hunting.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dnsenum</div>
+                        <div class="tool-description">Multithreaded perl script to enumerate DNS information and discover non-contiguous IP blocks.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Port Scanning Section -->
+            <div class="category">
+                <h2 class="category-title">🔌 Port Scanning</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">masscan</div>
+                        <div class="tool-description">TCP port scanner, spews SYN packets asynchronously, scanning entire Internet in under 5 minutes.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">RustScan</div>
+                        <div class="tool-description">The Modern Port Scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">naabu</div>
+                        <div class="tool-description">Fast port scanner written in Go with focus on reliability and simplicity.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">nmap</div>
+                        <div class="tool-description">Nmap - the Network Mapper.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">sandmap</div>
+                        <div class="tool-description">Nmap on steroids. Simple CLI with pure Nmap engine, 31 modules with 459 scan profiles.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ScanCannon</div>
+                        <div class="tool-description">Combines the speed of masscan with the reliability and detailed enumeration of nmap.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screenshots Section -->
+            <div class="category">
+                <h2 class="category-title">📸 Screenshots</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">EyeWitness</div>
+                        <div class="tool-description">Takes screenshots of websites, provides server header info, and identifies default credentials.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">aquatone</div>
+                        <div class="tool-description">Tool for visual inspection of websites across many hosts for HTTP-based attack surface overview.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">screenshoteer</div>
+                        <div class="tool-description">Make website screenshots and mobile emulations from the command line.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">gowitness</div>
+                        <div class="tool-description">Golang web screenshot utility using Chrome Headless.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">WitnessMe</div>
+                        <div class="tool-description">Web Inventory tool with screenshots using Pyppeteer (headless Chrome/Chromium).</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">eyeballer</div>
+                        <div class="tool-description">Convolutional neural network for analyzing pentest screenshots.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">scrying</div>
+                        <div class="tool-description">Tool for collecting RDP, web and VNC screenshots all in one place.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Depix</div>
+                        <div class="tool-description">Recovers passwords from pixelized screenshots.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">httpscreenshot</div>
+                        <div class="tool-description">Tool for grabbing screenshots and HTML of large numbers of websites.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technologies Section -->
+            <div class="category">
+                <h2 class="category-title">🔧 Technologies</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">wappalyzer</div>
+                        <div class="tool-description">Identify technology on websites.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">webanalyze</div>
+                        <div class="tool-description">Port of Wappalyzer to automate mass scanning of website technologies.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">python-builtwith</div>
+                        <div class="tool-description">BuiltWith API client.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">whatweb</div>
+                        <div class="tool-description">Next generation web scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">retire.js</div>
+                        <div class="tool-description">Scanner detecting use of JavaScript libraries with known vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">httpx</div>
+                        <div class="tool-description">Fast multi-purpose HTTP toolkit using retryablehttp library for reliable results.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">fingerprintx</div>
+                        <div class="tool-description">Standalone utility for service discovery on open ports that works with bug bounty tools.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Discovery Section -->
+            <div class="category">
+                <h2 class="category-title">🗂️ Content Discovery</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">gobuster</div>
+                        <div class="tool-description">Directory/File, DNS and VHost busting tool written in Go.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Feroxbuster</div>
+                        <div class="tool-description">Fast, simple, recursive content discovery tool written in Rust.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Ffuf</div>
+                        <div class="tool-description">Fast web fuzzer written in Go.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dirsearch</div>
+                        <div class="tool-description">Web path scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">recursebuster</div>
+                        <div class="tool-description">Rapid content discovery tool for recursively querying webservers.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">filebuster</div>
+                        <div class="tool-description">Extremely fast and flexible web fuzzer.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dirstalk</div>
+                        <div class="tool-description">Extremely fast and flexible web fuzzer.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dirbuster-ng</div>
+                        <div class="tool-description">Extremely fast and flexible web fuzzer.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">gospider</div>
+                        <div class="tool-description">Fast web spider written in Go.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">crawley</div>
+                        <div class="tool-description">Fast, feature-rich unix-way web scraper/crawler written in Golang.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parameters Section -->
+            <div class="category">
+                <h2 class="category-title">🔗 Parameters</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">parameth</div>
+                        <div class="tool-description">Tool for brute discovery of GET and POST parameters.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">param-miner</div>
+                        <div class="tool-description">Burp extension identifying hidden, unlinked parameters, useful for web cache poisoning vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ParamPamPam</div>
+                        <div class="tool-description">Tool for brute discover of GET and POST parameters.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Arjun</div>
+                        <div class="tool-description">HTTP parameter discovery suite.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ParamSpider</div>
+                        <div class="tool-description">Mining parameters from dark corners of Web Archives.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fuzzing Section -->
+            <div class="category">
+                <h2 class="category-title">🌀 Fuzzing</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">wfuzz</div>
+                        <div class="tool-description">Web application fuzzer.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ffuf</div>
+                        <div class="tool-description">Fast web fuzzer written in Go.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">fuzzdb</div>
+                        <div class="tool-description">Dictionary of attack patterns and primitives for black-box application fault injection.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">IntruderPayloads</div>
+                        <div class="tool-description">Collection of Burpsuite Intruder payloads, BurpBounty payloads, fuzz lists, malicious file uploads.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">fuzz.txt</div>
+                        <div class="tool-description">Potentially dangerous files.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">fuzzilli</div>
+                        <div class="tool-description">JavaScript Engine Fuzzer.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">fuzzapi</div>
+                        <div class="tool-description">Tool for REST API pentesting using API_Fuzzer gem.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">vaf</div>
+                        <div class="tool-description">Very advanced (web) fuzzer written in Nim.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CORS Section -->
+            <div class="category">
+                <h2 class="category-title">🎯 CORS Misconfiguration</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">Corsy</div>
+                        <div class="tool-description">CORS Misconfiguration Scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">CORStest</div>
+                        <div class="tool-description">Simple CORS misconfiguration scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">cors-scanner</div>
+                        <div class="tool-description">Multi-threaded scanner that helps identify CORS flaws/misconfigurations.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">CorsMe</div>
+                        <div class="tool-description">Cross Origin Resource Sharing MisConfiguration Scanner.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CRLF Injection Section -->
+            <div class="category">
+                <h2 class="category-title">↵ CRLF Injection</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">CRLFsuite</div>
+                        <div class="tool-description">Fast tool specially designed to scan CRLF injection.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">crlfuzz</div>
+                        <div class="tool-description">Fast tool to scan CRLF vulnerability written in Go.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">CRLF-Injection-Scanner</div>
+                        <div class="tool-description">Command line tool for testing CRLF injection on a list of domains.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Injectus</div>
+                        <div class="tool-description">CRLF and open redirect fuzzer.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSRF Injection Section -->
+            <div class="category">
+                <h2 class="category-title">🔄 CSRF Injection</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">XSRFProbe</div>
+                        <div class="tool-description">Prime Cross Site Request Forgery (CSRF) Audit and Exploitation Toolkit.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Directory Traversal Section -->
+            <div class="category">
+                <h2 class="category-title">📁 Directory Traversal</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">dotdotpwn</div>
+                        <div class="tool-description">The Directory Traversal Fuzzer.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">FDsploit</div>
+                        <div class="tool-description">File Inclusion & Directory Traversal fuzzing, enumeration & exploitation tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">off-by-slash</div>
+                        <div class="tool-description">Burp extension to detect alias traversal via NGINX misconfiguration at scale.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">liffier</div>
+                        <div class="tool-description">Short snippet to increment ../ on the URL for path traversal testing.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Inclusion Section -->
+            <div class="category">
+                <h2 class="category-title">📄 File Inclusion</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">liffy</div>
+                        <div class="tool-description">Local file inclusion exploitation tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Burp-LFI-tests</div>
+                        <div class="tool-description">Fuzzing for LFI using Burpsuite.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">LFI-Enum</div>
+                        <div class="tool-description">Scripts to execute enumeration via LFI.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">LFISuite</div>
+                        <div class="tool-description">Totally Automatic LFI Exploiter (+ Reverse Shell) and Scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">LFI-files</div>
+                        <div class="tool-description">Wordlist to bruteforce for LFI.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GraphQL Injection Section -->
+            <div class="category">
+                <h2 class="category-title">📊 GraphQL Injection</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">inql</div>
+                        <div class="tool-description">Burp Extension for GraphQL Security Testing.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">GraphQLmap</div>
+                        <div class="tool-description">Scripting engine to interact with GraphQL endpoints for pentesting.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">shapeshifter</div>
+                        <div class="tool-description">GraphQL security testing tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">graphql_beautifier</div>
+                        <div class="tool-description">Burp Suite extension to make GraphQL requests more readable.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">clairvoyance</div>
+                        <div class="tool-description">Obtain GraphQL API schema despite disabled introspection.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Injection Section -->
+            <div class="category">
+                <h2 class="category-title">📋 Header Injection</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">headi</div>
+                        <div class="tool-description">Customisable and automated HTTP header injection.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insecure Deserialization Section -->
+            <div class="category">
+                <h2 class="category-title">⚗️ Insecure Deserialization</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">ysoserial</div>
+                        <div class="tool-description">Proof-of-concept tool for generating payloads that exploit unsafe Java object deserialization.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">GadgetProbe</div>
+                        <div class="tool-description">Probe endpoints consuming Java serialized objects to identify classes, libraries, and versions.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ysoserial.net</div>
+                        <div class="tool-description">Deserialization payload generator for .NET formatters.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">phpggc</div>
+                        <div class="tool-description">Library of PHP unserialize() payloads with tool to generate them.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insecure Direct Object References Section -->
+            <div class="category">
+                <h2 class="category-title">🔓 Insecure Direct Object References</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">Autorize</div>
+                        <div class="tool-description">Automatic authorization enforcement detection extension for Burp Suite.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Open Redirect Section -->
+            <div class="category">
+                <h2 class="category-title">↪️ Open Redirect</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">Oralyzer</div>
+                        <div class="tool-description">Open Redirection Analyzer.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dom-red</div>
+                        <div class="tool-description">Small script to check a list of domains against open redirect vulnerability.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">OpenRedireX</div>
+                        <div class="tool-description">Fuzzer for OpenRedirect issues.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Race Condition Section -->
+            <div class="category">
+                <h2 class="category-title">🏁 Race Condition</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">razzer</div>
+                        <div class="tool-description">Kernel fuzzer focusing on race bugs.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">racepwn</div>
+                        <div class="tool-description">Race Condition framework.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">requests-racer</div>
+                        <div class="tool-description">Small Python library to exploit race conditions in web apps with Requests.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">turbo-intruder</div>
+                        <div class="tool-description">Burp Suite extension for sending large numbers of HTTP requests and analyzing results.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">race-the-web</div>
+                        <div class="tool-description">Tests for race conditions in web applications with RESTful API for CI integration.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Request Smuggling Section -->
+            <div class="category">
+                <h2 class="category-title">📦 Request Smuggling</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">http-request-smuggling</div>
+                        <div class="tool-description">HTTP Request Smuggling Detection Tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">smuggler</div>
+                        <div class="tool-description">HTTP Request Smuggling / Desync testing tool written in Python 3.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">h2csmuggler</div>
+                        <div class="tool-description">HTTP Request Smuggling over HTTP/2 Cleartext (h2c).</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">tiscripts</div>
+                        <div class="tool-description">Scripts to create Request Smuggling Desync payloads for CLTE and TECL style attacks.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SSRF Section -->
+            <div class="category">
+                <h2 class="category-title">🌐 Server Side Request Forgery (SSRF)</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">SSRFmap</div>
+                        <div class="tool-description">Automatic SSRF fuzzer and exploitation tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Gopherus</div>
+                        <div class="tool-description">Generates gopher links for exploiting SSRF and gaining RCE in various servers.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ground-control</div>
+                        <div class="tool-description">Collection of scripts for debugging SSRF, blind XSS, and XXE vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">SSRFire</div>
+                        <div class="tool-description">Automated SSRF finder with options for XSS and open redirects.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">httprebind</div>
+                        <div class="tool-description">Automatic tool for DNS rebinding-based SSRF attacks.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ssrf-sheriff</div>
+                        <div class="tool-description">Simple SSRF-testing sheriff written in Go.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">B-XSSRF</div>
+                        <div class="tool-description">Toolkit to detect and track Blind XSS, XXE & SSRF.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">extended-ssrf-search</div>
+                        <div class="tool-description">Smart SSRF scanner using parameter brute forcing in POST and GET.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">gaussrf</div>
+                        <div class="tool-description">Fetch URLs from AlienVault, Wayback Machine, Common Crawl and filter for SSRF parameters.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">ssrfDetector</div>
+                        <div class="tool-description">Server-side request forgery detector.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">grafana-ssrf</div>
+                        <div class="tool-description">Authenticated SSRF in Grafana.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">sentrySSRF</div>
+                        <div class="tool-description">Tool to search sentry config on page or in JavaScript files and check blind SSRF.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">lorsrf</div>
+                        <div class="tool-description">Bruteforcing on hidden parameters to find SSRF vulnerability using GET and POST methods.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">singularity</div>
+                        <div class="tool-description">DNS rebinding attack framework.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">whonow</div>
+                        <div class="tool-description">"Malicious" DNS server for executing DNS Rebinding attacks on the fly.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dns-rebind-toolkit</div>
+                        <div class="tool-description">Front-end JavaScript toolkit for creating DNS rebinding attacks.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dref</div>
+                        <div class="tool-description">DNS Rebinding Exploitation Framework.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">rbndr</div>
+                        <div class="tool-description">Simple DNS Rebinding Service.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dnsFookup</div>
+                        <div class="tool-description">DNS rebinding toolkit.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- XXE Injection Section -->
+            <div class="category">
+                <h2 class="category-title">📄 XXE Injection</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">dtd-finder</div>
+                        <div class="tool-description">List DTDs and generate XXE payloads using those local DTDs.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xxeserv</div>
+                        <div class="tool-description">Mini webserver with FTP support for XXE payloads.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">xxexploiter</div>
+                        <div class="tool-description">Tool to help exploit XXE vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XXEinjector</div>
+                        <div class="tool-description">Tool for automatic exploitation of XXE vulnerability using direct and out of band methods.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">oxml_xxe</div>
+                        <div class="tool-description">Tool for embedding XXE/XML exploits into different filetypes.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Passwords Section -->
+            <div class="category">
+                <h2 class="category-title">🔑 Passwords</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">thc-hydra</div>
+                        <div class="tool-description">Parallelized login cracker supporting numerous protocols.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">DefaultCreds-cheat-sheet</div>
+                        <div class="tool-description">Collection of default credentials for Blue/Red team activities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">changeme</div>
+                        <div class="tool-description">Default credential scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">BruteX</div>
+                        <div class="tool-description">Automatically brute force all services running on a target.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">patator</div>
+                        <div class="tool-description">Multi-purpose brute-forcer with modular design and flexible usage.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secrets Section -->
+            <div class="category">
+                <h2 class="category-title">🕵️ Secrets</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">git-secrets</div>
+                        <div class="tool-description">Prevents committing secrets and credentials into git repositories.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">gitleaks</div>
+                        <div class="tool-description">Scan git repos for secrets using regex and entropy.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">truffleHog</div>
+                        <div class="tool-description">Searches through git repositories for high entropy strings and secrets in commit history.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">gitGraber</div>
+                        <div class="tool-description">Monitors GitHub to search and find sensitive data in real time.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">talisman</div>
+                        <div class="tool-description">Git pre-push hook that validates outgoing changeset for suspicious content like tokens and keys.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">GitGot</div>
+                        <div class="tool-description">Semi-automated, feedback-driven tool to search through public GitHub data for secrets.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">git-all-secrets</div>
+                        <div class="tool-description">Captures all git secrets by leveraging multiple open source git searching tools.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">github-search</div>
+                        <div class="tool-description">Tools to perform basic search on GitHub.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">git-vuln-finder</div>
+                        <div class="tool-description">Finding potential software vulnerabilities from git commit messages.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">commit-stream</div>
+                        <div class="tool-description">OSINT tool for finding GitHub repositories by extracting commit logs in real time.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">gitrob</div>
+                        <div class="tool-description">Reconnaissance tool for GitHub organizations.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">repo-supervisor</div>
+                        <div class="tool-description">Scan code for security misconfiguration, passwords and secrets.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">GitMiner</div>
+                        <div class="tool-description">Tool for advanced mining for content on Github.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">shhgit</div>
+                        <div class="tool-description">Find GitHub secrets in real time.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">detect-secrets</div>
+                        <div class="tool-description">Enterprise friendly way of detecting and preventing secrets in code.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">rusty-hog</div>
+                        <div class="tool-description">Suite of secret scanners built in Rust for performance (based on TruffleHog).</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">whispers</div>
+                        <div class="tool-description">Identify hardcoded secrets and dangerous behaviours.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">yar</div>
+                        <div class="tool-description">Tool for plunderin' organizations, users and/or repositories.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dufflebag</div>
+                        <div class="tool-description">Search exposed EBS volumes for secrets.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">secret-bridge</div>
+                        <div class="tool-description">Monitors Github for leaked secrets.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">earlybird</div>
+                        <div class="tool-description">Sensitive data detection tool for scanning source code repositories.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Trufflehog-Chrome-Extension</div>
+                        <div class="tool-description">Git</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Git Tools Section -->
+            <div class="category">
+                <h2 class="category-title">🐙 Git Tools</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">GitTools</div>
+                        <div class="tool-description">Repository with 3 tools for pwn'ing websites with .git repositories available.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">gitjacker</div>
+                        <div class="tool-description">Leak git repositories from misconfigured websites.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">git-dumper</div>
+                        <div class="tool-description">Tool to dump a git repository from a website.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">GitHunter</div>
+                        <div class="tool-description">Tool for searching a Git repository for interesting content.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dvcs-ripper</div>
+                        <div class="tool-description">Rip web accessible version control systems: SVN/GIT/HG.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CMS Section -->
+            <div class="category">
+                <h2 class="category-title">🏗️ CMS</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">wpscan</div>
+                        <div class="tool-description">Free black box WordPress security scanner for non-commercial use.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">CMSeek</div>
+                        <div class="tool-description">CMS Detection and Exploitation suite - Scan WordPress, Joomla, Drupal and 170+ other CMSs.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Droopescan</div>
+                        <div class="tool-description">Plugin-based scanner for identifying issues with Drupal, Silverstripe and other CMSs.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Drupwn</div>
+                        <div class="tool-description">Drupal enumeration & exploitation tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">WPSpider</div>
+                        <div class="tool-description">Centralized dashboard for running and scheduling WordPress scans powered by wpscan.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">wprecon</div>
+                        <div class="tool-description">Wordpress Recon.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">CMSmap</div>
+                        <div class="tool-description">Python open source CMS scanner automating detection of security flaws in popular CMSs.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">joomscan</div>
+                        <div class="tool-description">OWASP Joomla Vulnerability Scanner Project.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">pyfiscan</div>
+                        <div class="tool-description">Free web-application vulnerability and version scanner.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JWT Section -->
+            <div class="category">
+                <h2 class="category-title">🎫 JSON Web Token (JWT)</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">jwt_tool</div>
+                        <div class="tool-description">Toolkit for testing, tweaking and cracking JSON Web Tokens.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">c-jwt-cracker</div>
+                        <div class="tool-description">JWT brute force cracker written in C.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">jwt-heartbreaker</div>
+                        <div class="tool-description">Burp extension to check JWT for keys from known public sources.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">jwtear</div>
+                        <div class="tool-description">Modular command-line tool to parse, create and manipulate JWT tokens for hackers.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">jwt-key-id-injector</div>
+                        <div class="tool-description">Simple python script to check against hypothetical JWT vulnerability.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">jwt-hack</div>
+                        <div class="tool-description">Tool for hacking/security testing JWT.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">jwt-cracker</div>
+                        <div class="tool-description">Simple HS256 JWT token brute force cracker.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- postMessage Section -->
+            <div class="category">
+                <h2 class="category-title">💬 postMessage</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">postMessage-tracker</div>
+                        <div class="tool-description">Chrome Extension to track postMessage usage (URL, domain and stack).</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">PostMessage_Fuzz_Tool</div>
+                        <div class="tool-description">WebDeveloper Tool.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subdomain Takeover Section -->
+            <div class="category">
+                <h2 class="category-title">🎭 Subdomain Takeover</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">subjack</div>
+                        <div class="tool-description">Subdomain Takeover tool written in Go.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Subdomain-takeover</div>
+                        <div class="tool-description">Sub-Domain TakeOver Vulnerability Scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Sub0ver</div>
+                        <div class="tool-description">Powerful Subdomain Takeover Tool.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">autoSubTakeover</div>
+                        <div class="tool-description">Tool to check if CNAME resolves to scope address for possible takeover.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">NSBrute</div>
+                        <div class="tool-description">Python utility to takeover domains vulnerable to AWS NS Takeover.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">can-i-take-over-xyz</div>
+                        <div class="tool-description">List of services and how to claim (sub)domains with dangling DNS records.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">cnames</div>
+                        <div class="tool-description">Take list of resolved subdomains and output corresponding CNAMES en masse.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">subHijack</div>
+                        <div class="tool-description">Hijacking forgotten & misconfigured subdomains.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">tko-subs</div>
+                        <div class="tool-description">Tool to detect and takeover subdomains with dead DNS records.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">HostileSubBruteforcer</div>
+                        <div class="tool-description">Bruteforce for existing subdomains and check if 3rd party host is properly setup.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">second-order</div>
+                        <div class="tool-description">Second-order subdomain takeover scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">takeover</div>
+                        <div class="tool-description">Tool for testing subdomain takeover possibilities at mass scale.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">dnsReaper</div>
+                        <div class="tool-description">Sub-domain takeover tool with emphasis on accuracy, speed and number of signatures.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability Scanners Section -->
+            <div class="category">
+                <h2 class="category-title">📊 Vulnerability Scanners</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">nuclei</div>
+                        <div class="tool-description">Fast tool for configurable targeted scanning based on templates with massive extensibility.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Sn1per</div>
+                        <div class="tool-description">Automated pentest framework for offensive security experts.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">metasploit-framework</div>
+                        <div class="tool-description">Metasploit Framework.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">nikto</div>
+                        <div class="tool-description">Nikto web server scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">arachni</div>
+                        <div class="tool-description">Web Application Security Scanner Framework.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">jaeles</div>
+                        <div class="tool-description">Swiss Army knife for automated Web Application Testing.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">getsploit</div>
+                        <div class="tool-description">Command line utility for searching and downloading exploits.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">flan</div>
+                        <div class="tool-description">Pretty sweet vulnerability scanner.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Findsploit</div>
+                        <div class="tool-description">Find exploits in local and online databases instantly.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">BlackWidow</div>
+                        <div class="tool-description">Python web application scanner to gather OSINT and fuzz for OWASP vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">backslash-powered-scanner</div>
+                        <div class="tool-description">Finds unknown classes of injection vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Eagle</div>
+                        <div class="tool-description">Multithreaded Plugin based vulnerability scanner for mass detection of web vulnerabilities.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">OWASP ZAP</div>
+                        <div class="tool-description">World's most popular free web security tools maintained by international volunteers.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Uncategorized Section -->
+            <div class="category">
+                <h2 class="category-title">📦 Uncategorized</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">JSONBee</div>
+                        <div class="tool-description">Ready to use JSONP endpoints/payloads to help bypass content security policy (CSP).</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">CyberChef</div>
+                        <div class="tool-description">Cyber Swiss Army Knife - web app for encryption, encoding, compression and data analysis.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">bountyplz</div>
+                        <div class="tool-description">Automated security reporting from markdown templates (HackerOne and Bugcrowd supported).</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">PayloadsAllTheThings</div>
+                        <div class="tool-description">List of useful payloads and bypass for Web Application Security and Pentest/CTF.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">bounty-targets-data</div>
+                        <div class="tool-description">Hourly-updated data dumps of bug bounty platform scopes (Hackerone/Bugcrowd/Intigriti/etc).</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">android-security-awesome</div>
+                        <div class="tool-description">Collection of android security related resources.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">awesome-mobile-security</div>
+                        <div class="tool-description">Single place for all useful android and iOS security related stuff.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">awesome-vulnerable-apps</div>
+                        <div class="tool-description">Awesome Vulnerable Applications.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">XFFenum</div>
+                        <div class="tool-description">X-Forwarded-For [403 forbidden] enumeration.</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">Assetnote Wordlists</div>
+                        <div class="tool-description">wordlists.assetnote.io</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <h3>Total Categories</h3>
+                <p>31</p>
+            </div>
+            <div class="stat-item">
+                <h3>Total Tools</h3>
+                <p>200+</p>
+            </div>
+            <div class="stat-item">
+                <h3>Last Updated</h3>
+                <p>December 2023</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2023 HunterVault - Complete Bug Bounty Tools Repository | Curated by Aryan Giri</p>
+        <p>All tools mentioned are for educational and authorized security testing purposes only.</p>
+        <p>References: Hacking Articles | Ignite Technologies</p>
+    </footer>
+
+    <script>
+        // Theme Management
+        function getThemePreference() {
+            const storedTheme = document.cookie.split('; ').find(row => row.startsWith('theme='));
+            return storedTheme ? storedTheme.split('=')[1] : 'light';
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.cookie = `theme=${theme}; path=/; max-age=31536000`;
+            
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            
+            if (theme === 'dark') {
+                icon.textContent = '☀️';
+                text.textContent = 'Light Mode';
+            } else {
+                icon.textContent = '🌙';
+                text.textContent = 'Dark Mode';
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+        }
+
+        // Initialize theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = getThemePreference();
+            setTheme(savedTheme);
+        });
+
+        // Search Functionality
+        function searchTools() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const toolCards = document.querySelectorAll('.tool-card');
+            const categories = document.querySelectorAll('.category');
+
+            let visibleCategories = 0;
+
+            categories.forEach(category => {
+                const categoryTools = category.querySelectorAll('.tool-card');
+                let visibleTools = 0;
+
+                categoryTools.forEach(card => {
+                    const toolName = card.querySelector('.tool-name').textContent.toLowerCase();
+                    const toolDesc = card.querySelector('.tool-description').textContent.toLowerCase();
+                    
+                    if (toolName.includes(searchTerm) || toolDesc.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        visibleTools++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (visibleTools > 0 || searchTerm === '') {
+                    category.style.display = 'block';
+                    visibleCategories++;
+                } else {
+                    category.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
