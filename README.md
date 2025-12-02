@@ -54,12 +54,12 @@ FILE STRUCTURE:
 - Cookie-based theme preference storage
 
 ## BROWSER COMPATIBILITY:
-✅ Chrome 60+
-✅ Firefox 55+
-✅ Safari 11+
-✅ Edge 79+
-✅ Opera 50+
-✅ Mobile browsers
+- ✅ Chrome 60+
+- ✅ Firefox 55+
+- ✅ Safari 11+
+- ✅ Edge 79+
+- ✅ Opera 50+
+- ✅ Mobile browsers
 
 ## CATEGORIES
 
