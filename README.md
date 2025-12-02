@@ -1,10 +1,10 @@
 # BUG BOUNTY TOOLS REPOSITORY
 
-Project: HunterVault - Complete Bug Bounty Tools Reference
-Version: 1.0
-Created: December 2025
-Author: Aryan Giri
-Website: https://giriaryan694-a11y.github.io/HunterVault/
+- Project: HunterVault - Complete Bug Bounty Tools Reference
+- Version: 1.0
+- Created: December 2025
+- Author: Aryan Giri
+- Website: https://giriaryan694-a11y.github.io/HunterVault/
 
 ## OVERVIEW
 
